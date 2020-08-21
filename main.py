@@ -1,11 +1,11 @@
-import discord, asyncio
-import time
-
-from blackjack import BlackJack
+import discord, asyncio, json
 from weather import Weather
 
-token = 'your discord bot token'
+with open('token.json') as token_file:
+    token_data = json.load(token_file)
+    discord_token = token_data["discord_token"]
 
+token = discord_token
 bot = discord.Client()
 
 async def msgEmbed(msg, title, description):
@@ -22,13 +22,12 @@ async def on_ready():
     
 @bot.event
 async def on_message(msg):
-    if "심심" in msg.content:
-        await msg.channel.send("$blackjack")
-        
-    if msg.content == "$blackjack":
-        game = BlackJack(msg, bot)
-        await game.start()
-        
+    if msg.content == "$help":
+        embed = discord.Embed(title=f"Help", description=f'''
+            Usage: \n
+            $weather 도시명\n
+            또는 "도시 날씨" ''')
+        await msg.channel.send(embed=embed)
     
     if msg.content.startswith("$weather"):
         message = msg.content.split(" ")

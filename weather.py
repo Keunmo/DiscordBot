@@ -1,20 +1,29 @@
+# import discord, asyncio
 from googletrans import Translator
-import requests, discord
+import requests, discord, json
 
+with open('token.json') as token_file:
+    token_data = json.load(token_file)
+    weather_token = token_data["weather_token"]
 
 class Weather:
     def __init__(self, msg, bot):
         self.msg = msg
         self.bot = bot
-        self.weather_key = 'your weather key'
+        self.weather_key = weather_token
     
-    async def weather(self, args='안산'):
+    async def weather(self, args='서울'):
         ''' Show weather condition. Usage : $weather <city name>. 도시명은 영문으로 입력해야 합니다. 한국 일부 도시들에 한해 한글입력을 지원합니다. '''
             
         translator = Translator()
         trans = translator.translate(args, dest='en')
         if trans.src == 'ko':
             args = trans.text
+        if ' ' in args:
+            args = args.replace(' ', '')
+        if '-' in args:
+            args = args.replace('-', '')
+        print(args)
             
         url = 'http://api.openweathermap.org/data/2.5/weather'
         params = {'q': args, 'appid': self.weather_key, 'units': 'metric', 'lang': 'kr'}
@@ -25,7 +34,7 @@ class Weather:
             Usage: \n
             $weather 도시명\n
             또는 "도시 날씨" ''')
-            return await self.msg.channel.send(embed=embed) # 이런 형태로 수정해 주세요
+            return await self.msg.channel.send(embed=embed)
         
         city_name = response["name"]
         tran_res = translator.translate(city_name, dest='ko')
@@ -50,7 +59,7 @@ class Weather:
             emoji = '☀️'
         elif (801 <= response["weather"][0]["id"] <= 804):
             emoji = '☁️'
-        if emoji == '⚡️' or emoji == '🌧' or emoji == '☔' or emoji == '☃️':
+        if emoji == ('⚡️' or '🌧' or '☔' or '☃️'):
             embed = discord.Embed(title=f"현재 %s의 날씨는 %s입니다. %s" %(tran_res.text, weather_main, emoji), description=f"우산을 챙기세요.")
         else:
             embed = discord.Embed(title=f"현재 %s의 날씨는 %s입니다. %s" %(tran_res.text, weather_main, emoji))
@@ -58,7 +67,7 @@ class Weather:
         embed.add_field(name=f"습도", value=f"현재습도 : %d%%" %(humidity))
         await self.msg.channel.send(embed=embed)
 
-# bot = commands.Bot(command_prefix="$", activity=discord.Activity(name="Simple bot example | $help", type=1), description='Simple bot example')
+# bot = commands.Bot(command_prefix="$", activity=discord.Activity(name="Weather Bot | $help", type=1), description='Weather Bot')
 
 # @bot.event
 # async def on_ready():
