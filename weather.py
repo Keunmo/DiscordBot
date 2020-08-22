@@ -12,7 +12,7 @@ class Weather:
         self.bot = bot
         self.weather_key = weather_token
     
-    async def weather(self, args='서울'):
+    async def weather(self, args='서울'):   # 도시명을 입력하지 않았을 경우, 서울이 기본값으로 표시됩니다
         ''' Show weather condition. Usage : $weather <city name>. 도시명은 영문으로 입력해야 합니다. 한국 일부 도시들에 한해 한글입력을 지원합니다. '''
             
         translator = Translator()
@@ -23,7 +23,7 @@ class Weather:
             args = args.replace(' ', '')
         if '-' in args:
             args = args.replace('-', '')
-        print(args)
+        # print(args)
             
         url = 'http://api.openweathermap.org/data/2.5/weather'
         params = {'q': args, 'appid': self.weather_key, 'units': 'metric', 'lang': 'kr'}
@@ -59,7 +59,7 @@ class Weather:
             emoji = '☀️'
         elif (801 <= response["weather"][0]["id"] <= 804):
             emoji = '☁️'
-        if emoji == ('⚡️' or '🌧' or '☔' or '☃️'):
+        if emoji =='⚡️' or emoji =='🌧' or emoji =='☔' or emoji =='☃️':
             embed = discord.Embed(title=f"현재 %s의 날씨는 %s입니다. %s" %(tran_res.text, weather_main, emoji), description=f"우산을 챙기세요.")
         else:
             embed = discord.Embed(title=f"현재 %s의 날씨는 %s입니다. %s" %(tran_res.text, weather_main, emoji))

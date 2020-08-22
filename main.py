@@ -16,7 +16,7 @@ async def msgEmbed(msg, title, description):
 async def on_ready():
     print('Logged in as {0} {1}'.format(bot.user.name, bot.user.id))
     print('------')
-    game = discord.Game("Simple Bot | $help")
+    game = discord.Game("Simple Bot | 일기예보")
     await bot.change_presence(status=discord.Status.online, activity=game)
 
     
@@ -40,11 +40,14 @@ async def on_message(msg):
     if "날씨" in msg.content:
         message = msg.content.split("날씨")
         city = message[0].rstrip()
-        city = city.split(' ')
-        city = city[-1]
+        city = city.split(' ')[-1]
+        # print(city)
         # await msg.channel.send(message)
         show = Weather(msg, bot)
-        await show.weather(city)
+        if city == '':
+            await show.weather()
+        else:
+            await show.weather(city)
         # if (len(message) == 2):
         #     await show.weather(message[0])
         # else:

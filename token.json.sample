@@ -1,6 +1,4 @@
 {
-    "discord_token" : "your_discord_token",
-    // https://discord.com/developers/applications/
-    "weather_token" : "your_weather_token"
-    // https://home.openweathermap.org/api_keys
+    "discord_token" : "write_your_discord_token",
+    "weather_token" : "write_your_weather_token"
 }
