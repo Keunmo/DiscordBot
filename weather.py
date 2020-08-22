@@ -23,7 +23,7 @@ class Weather:
             args = args.replace(' ', '')
         if '-' in args:
             args = args.replace('-', '')
-        # print(args)
+        # print('city input trans:',args)
             
         url = 'http://api.openweathermap.org/data/2.5/weather'
         params = {'q': args, 'appid': self.weather_key, 'units': 'metric', 'lang': 'kr'}
@@ -37,8 +37,9 @@ class Weather:
             return await self.msg.channel.send(embed=embed)
         
         city_name = response["name"]
-        tran_res = translator.translate(city_name, dest='ko')
-        # print(tran_res)
+        # print('city output:   ',city_name)
+        tran_res = translator.translate(city_name, src='en', dest='ko')
+        # print('city output trans:',tran_res.text)
         weather_main = response["weather"][0]["description"]
         temp = response["main"]["temp"]
         feels_like = response["main"]["feels_like"]
